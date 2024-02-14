@@ -1,0 +1,80 @@
+.contener{
+	background: #61DBFB;
+	width: 240px;
+	padding: 5px;
+}
+
+.contener span:active {
+	box-shadow: 0px 0px 5px 2px #181331 inset;
+	top: 4px;
+}
+
+.contener span.eval:active {
+	box-shadow: 0px 0px 5px 2px #717a33 inset;
+	top: 4px;
+}
+
+.bnt{
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	border-radius: 3px;
+	margin: 5px;
+	line-height: 40px;
+	cursor: pointer;
+	float: left;
+}
+
+.numBnt{
+	background: white;
+	color:black;
+}
+
+
+.operatorBtn{
+	background: rgb(230, 142, 43);
+	color:black;
+	float: left;
+	height: 110px;
+}
+
+.resetBtn{
+	background: rgb(184, 10, 10);
+	color:rgb(255, 255, 255);
+
+}
+
+.numBlock{
+	width: 180px;
+	float: left;
+}
+
+.equalBnt{
+	width: 110px;
+	height: 50px;
+	text-align: center;
+	border-radius: 3px;
+	margin: 5px;
+	line-height: 40px;
+	cursor: pointer;
+	float: left;
+	background: rgb(179, 179, 179);
+	color:black;
+}
+
+.screen{
+	background: rgb(218, 251, 255);
+	color:black;
+	box-shadow: inset 0px 4px rgba(0, 0, 0, 0.2);
+	text-align: right;
+	line-height: 50px;
+	width: 150px;
+	height: 50px;
+	border-radius: 3px;
+	margin: 5px;
+	padding: 0 10px;
+	float: left;
+}
+.screenBacklight{
+	color:rgb(5, 160, 113);
+}
