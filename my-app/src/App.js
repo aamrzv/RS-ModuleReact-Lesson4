@@ -1,75 +1,78 @@
-import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const schema = yup.object().shape({
+	email: yup.string().email('Некорректный адрес электронной почты').required('Обязательное поле'),
+	password: yup.string().min(6, 'Пароль должен содержать не менее 6 символов').required('Обязательное поле'),
+	confirmPassword: yup
+		.string()
+		.oneOf([yup.ref('password'), null], 'Пароли не совпадают')
+		.required('Обязательное поле'),
+});
 
 export const App = () => {
-	const [formData, setFormData] = useState({
-		email: '',
-		password: '',
-		confirmPassword: '',
+	const {
+		control,
+		handleSubmit,
+		formState: { errors, isValid },
+	} = useForm({
+		resolver: yupResolver(schema),
+		mode: 'all',
+		defaultValues: {
+			email: '',
+			password: '',
+			confirmPassword: '',
+		},
 	});
 
-	const [errors, setErrors] = useState({});
-	const [isFormValid, setIsFormValid] = useState(false);
-
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setFormData((prevData) => ({ ...prevData, [name]: value }));
-		validateField(name, value);
-	};
-
-	const validateField = (fieldName, value) => {
-		const newErrors = { ...errors };
-
-		switch (fieldName) {
-			case 'email':
-				newErrors.email = /\S+@\S+\.\S+/.test(value) ? '' : 'Некорректный адрес электронной почты';
-				break;
-			case 'password':
-				newErrors.password = value.length >= 6 ? '' : 'Пароль должен содержать не менее 6 символов';
-				break;
-			case 'confirmPassword':
-				newErrors.confirmPassword = value === formData.password ? '' : 'Пароли не совпадают';
-				break;
-			default:
-				break;
-		}
-
-		setErrors(newErrors);
-		validateForm(newErrors);
-	};
-
-	const validateForm = (newErrors) => {
-		const isValid = Object.values(newErrors).every((error) => error === '') && Object.values(formData).every((value) => value !== '');
-		setIsFormValid(isValid);
-	};
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		if (isFormValid) {
-			console.log('Данные формы:', formData);
-		} else {
-			console.log('Форма содержит ошибки');
-		}
+	const onSubmit = (data) => {
+		console.log('Данные формы:', data);
 	};
 
 	return (
 		<div className="App">
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleSubmit(onSubmit)}>
 				<div>
 					<label>Email:</label>
-					<input type="text" name="email" value={formData.email} onChange={handleChange} />
-					{errors.email && <span>{errors.email}</span>}
+					<Controller
+						name="email"
+						control={control}
+						render={({ field }) => (
+							<>
+								<input type="text" {...field} />
+								{errors.email && <span>{errors.email.message}</span>}
+							</>
+						)}
+					/>
 				</div>
 				<div>
 					<label>Пароль:</label>
-					<input type="password" name="password" value={formData.password} onChange={handleChange} />
-					{errors.password && <span>{errors.password}</span>}
+					<Controller
+						name="password"
+						control={control}
+						render={({ field }) => (
+							<>
+								<input type="password" {...field} />
+								{errors.password && <span>{errors.password.message}</span>}
+							</>
+						)}
+					/>
 				</div>
 				<div>
 					<label>Повтор пароля:</label>
-					<input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
-					{errors.confirmPassword && <span>{errors.confirmPassword}</span>}
+					<Controller
+						name="confirmPassword"
+						control={control}
+						render={({ field }) => (
+							<>
+								<input type="password" {...field} />
+								{errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
+							</>
+						)}
+					/>
 				</div>
-				<button type="submit" disabled={!isFormValid}>
+				<button type="submit" disabled={!isValid}>
 					Зарегистрироваться
 				</button>
 			</form>
